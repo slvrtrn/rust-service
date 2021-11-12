@@ -5,10 +5,11 @@ mod http;
 mod kafka;
 
 #[actix_web::main]
-async fn main() -> std::io::Result<()> {
+// #[tokio::main]
+async fn main() -> futures::io::Result<()> {
     lazy_static::initialize(&CONFIG);
     env_logger::init();
     log::info!("Starting the app in {} mode", &CONFIG.rust_env);
-    kafka::init_kafka_consumer();
+    kafka::init_kafka_consumers().await;
     http::init_http_server().await
 }

@@ -9,8 +9,9 @@ use serde::Deserialize;
 pub struct Config {
     pub kafka_bootstrap_server: String,
     pub kafka_inbox_topic: String,
+    pub kafka_inbox_group_id: String,
+    pub kafka_inbox_num_workers: u8,
     pub kafka_client_id: String,
-    pub kafka_group_id: String,
     pub http_addr: String,
     pub rust_env: String,
 }
