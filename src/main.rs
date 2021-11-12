@@ -1,13 +1,14 @@
-use actix_web::{App, HttpServer};
+use globals::CONFIG;
 
+mod globals;
 mod http;
-
-const ADDR: &str = "127.0.0.1:3003";
+mod kafka;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    HttpServer::new(|| App::new().service(http::healthz))
-        .bind(ADDR)?
-        .run()
-        .await
+    lazy_static::initialize(&CONFIG);
+    env_logger::init();
+    log::info!("Starting the app in {} mode", &CONFIG.rust_env);
+    kafka::init_kafka_consumer();
+    http::init_http_server().await
 }
