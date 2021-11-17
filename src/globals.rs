@@ -1,7 +1,6 @@
 use std::fs::File;
 use std::io::Read;
 
-use anyhow::Result;
 use lazy_static::lazy_static;
 use serde::Deserialize;
 
@@ -12,7 +11,7 @@ pub struct Config {
     pub kafka_inbox_group_id: String,
     pub kafka_inbox_num_workers: u8,
     pub kafka_client_id: String,
-    pub http_addr: String,
+    pub http_port: u16,
     pub rust_env: String,
 }
 
@@ -25,7 +24,7 @@ impl Config {
     }
 }
 
-fn load_config() -> Result<Config> {
+fn load_config() -> std::io::Result<Config> {
     let env = envy::from_env::<Config>();
     match env {
         // if we could load the config using the existing env variables - use that

@@ -19,7 +19,7 @@ cp .env.example .env
 
 ```
 docker-compose exec kafka kafka-topics --create \
-  --topic InboxTopic \
+  --topic OrdersOutbox \
   --bootstrap-server localhost:9092 \
   --partitions 32 \
   --replication-factor 1
@@ -35,7 +35,7 @@ cargo run
 
 ```
 docker-compose exec kafka kafka-console-producer \
-  --topic InboxTopic \
+  --topic OrdersOutbox \
   --bootstrap-server localhost:9092
 ```
 
