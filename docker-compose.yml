@@ -77,3 +77,13 @@ services:
       KAFKA_BROKERS: kafka:9092
       KAFKA_SCHEMAREGISTRY_ENABLED: 'true'
       KAFKA_SCHEMAREGISTRY_URLS: http://schema-registry:8081
+
+  postgres:
+    image: postgres:14.1
+    container_name: rust_service_postgres
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres

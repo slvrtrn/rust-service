@@ -13,6 +13,9 @@ pub struct Config {
     pub kafka_client_id: String,
     pub http_port: u16,
     pub rust_env: String,
+    pub database_url: String,
+    pub database_max_connections: u32,
+    pub database_connection_timeout_seconds: u64,
 }
 
 #[allow(dead_code)]
@@ -25,7 +28,7 @@ impl Config {
     }
 }
 
-fn load_config() -> std::io::Result<Config> {
+fn load_config() -> anyhow::Result<Config> {
     let env = envy::from_env::<Config>();
     match env {
         // if we could load the config using the existing env variables - use that
@@ -37,11 +40,11 @@ fn load_config() -> std::io::Result<Config> {
             let mut content = String::new();
             file.read_to_string(&mut content)?;
             for line in content.lines() {
-                let pair = line.split('=').collect::<Vec<&str>>();
-                let (key, value) = match &pair[..] {
-                    &[key, value] => (key, value),
-                    _ => panic!("Expected env variable pairs, got {}", content),
-                };
+                let eq_pos = line
+                    .find('=')
+                    .expect(&format!("Expected env variable pairs, got {}", content));
+                let key = &line[..eq_pos];
+                let value = &line[(eq_pos + 1)..];
                 std::env::set_var(key, value);
             }
             match envy::from_env::<Config>() {
