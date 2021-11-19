@@ -15,6 +15,7 @@ pub struct Config {
     pub rust_env: String,
 }
 
+#[allow(dead_code)]
 impl Config {
     pub fn is_production(&self) -> bool {
         self.rust_env == "production"
